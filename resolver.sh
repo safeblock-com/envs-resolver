@@ -82,8 +82,15 @@ echo
 echo "Setup variables for stage ${STAGE}"
 
 ENVS_LINK="${ENVS_HOME}/${PROJECT_NAME}/.env.${STAGE}"
-echo "Download envs from ${ENVS_LINK}"
-curl --fail -s -o .env ${ENVS_LINK} || fail "Can't download envs file ${ENVS_LINK}"
+
+
+if echo ${ENVS_LINK} | grep http; then
+  echo "Download envs from ${ENVS_LINK}"
+  curl --fail -s -o .env ${ENVS_LINK} || fail "Can't download envs file ${ENVS_LINK}"
+else
+  echo "Copy ${ENVS_LINK} to .env"
+  cp ${ENVS_LINK} .env
+fi
 
 echo
 echo "Output:"
